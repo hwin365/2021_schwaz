@@ -146,6 +146,5 @@ graph combine abb4_norm.gph abb4_icu.gph,
 	graphregion(color(white)) rows(1) xsize(4) ysize(2) iscale(1);
 #delimit cr
 graph export Fig4.png, as(png) replace
-restore
 
 exit

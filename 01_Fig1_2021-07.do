@@ -9,14 +9,9 @@ set more off
 cd "SET YOUR DIRECTORY"
 
 *****************************************************************************
-*** Load data
-*****************************************************************************
-use `data'/BKZ_d_2021-07, replace
-
-*****************************************************************************
 *** Load district data & merge with vaccination data
 *****************************************************************************
-use daten/BKZ_d_2021-07.dta, clear
+use daten/BKZ_d_2021-07.dta, clear	 // data used to draw the figure
 
 *** Merge population aged 0-16
 merge m:1 bkz using ".. bezirke_einwohner", keepus(a_00_20)

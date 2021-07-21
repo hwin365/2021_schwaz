@@ -42,7 +42,7 @@ rangestat (sum) dose1, int(tt `spell' 0) by(bkz)
 rangestat (sum) dose2, int(tt `spell' 0) by(bkz)
 rangestat (sum) volli, int(tt `spell' 0) by(bkz)
 
-*** Vaccination per head
+*** Vaccination per capita in %
 replace pop=pop-a_00_20				// correct for 0-16
 g d1=dose1_sum/pop*100
 g d2=dose2_sum/pop*100

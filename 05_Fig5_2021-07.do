@@ -218,7 +218,7 @@ matrix colnames results= schwaz schwaz_lb schwaz_ub date
 mat li results, f(%8.2f)	
 
 *****************************************************************************
-**** Graph
+**** ES-Figure
 *****************************************************************************
 preserve
 clear

@@ -11,7 +11,7 @@ cd "SET WORKING DIRECTORY"
 *** Load data
 *****************************************************************************
 forval i = 1/6 {
-use `data_temp'/inf_BKZ_agek`i', clear		// load data for each age-group
+use inf_BKZ_agek`i', clear		// load data for each age-group
 
 xtset bkz date
 sort bkz date

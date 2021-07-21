@@ -130,8 +130,7 @@ drop if time>112
 
 sum time
 #delimit
-twoway // line diff1 time, lp(dash) lw(0.5) lc(teal%20) ||
-	line diff2 time, lw(0.5) lc(gold*1.0) ||
+twoway line diff2 time, lw(0.5) lc(gold*1.0) ||
 	line diff3 time, lw(0.5) lc(orange*1.0) ||
 	line diff4 time, lw(0.5) lc(blue*0.5) ||
 	line diff5 time, lw(0.5) lc(purple*0.7) ||

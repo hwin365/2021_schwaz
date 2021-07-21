@@ -126,7 +126,7 @@ egen id=group(gkz)
 keep id treat date pop gkz week time nc_ages nc_goeg nd_goeg nc_alpha nc_alpha1 nc_beta nc_gamma
 
 *** Switch between nc (new cases: nc_goeg), nc_alpha+nc_alpha1 & nc_beta
-g nc=nc_alpha+nc_alpha1+nc_beta
+g nc=nc_goeg
 
 *** 7-day MA per 100.000
 xtset gkz date
@@ -187,8 +187,8 @@ local row = 1
 *** Regressions
 egen id=group(gkz)
 xtset id date
-*xtreg nc_av ints* time* if sample, fe vce(cl gkz)
-reghdfe nc_av ints* if sample, a(id time) vce(cl gkz)		// alternative
+xtreg nc_av ints* time* if sample, fe vce(cl gkz)
+*reghdfe nc_av ints* if sample, a(id time) vce(cl gkz)		// alternative
 drop id
 
 *** Matrix of coefficients
@@ -246,12 +246,13 @@ twoway scatter schwaz tte, m(o) mc(red*1.4) msiz(1.7) ||
 	legend(order(1 "Point estimate" 2 "95% -- CI") ring(0) pos(1) rows(1) bm("3 0 2 0") linegap(1) region(color(none)) symy(3) symx(5) si(2.5))
 	note("", span si(3) linegap(1) m(t=3)) 
 	plotregion(lcolor(gray*0.5) m(l=1)) graphregion(margin(2 5 2 2))
-	saving(abb5_mutant, replace);
+	saving(abb5_allinf, replace);
 #delimit cr
 restore
 
 *****************************************************************************
-**** 2x2 DD
+**** Table 1, columns 2-4: 2x2 DD-estimates
+**** Change in line 128 for (1): nc_goeg, (2) nc_alpha+nc_alpha1, (3) nc_beta
 *****************************************************************************
 g ints=(date>`event' & treat==1)
 egen id=group(gkz), label
@@ -273,7 +274,7 @@ di as red (exp(_coef[1.treat#1.post1])-1)*100
 
 *****************************************************************************
 **** Figure 5: Combined graph 
-**** First, letzt code run with nc_goeg in line 135, then change to nc_alpha+nc_alpha1+nc_beta
+**** First, letzt code run with nc_goeg in line 128, then change to nc_alpha+nc_alpha1+nc_beta
 *****************************************************************************
 #delimit
 graph combine abb5_allinf.gph abb5_mutant.gph, 

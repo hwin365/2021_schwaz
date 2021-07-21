@@ -6,7 +6,7 @@ capture log close
 set more off
 
 *** Set paths
-cd "SET YOUR DIRECTORY"
+cd "SET WORKING DIRECTORY"
 
 *****************************************************************************
 *** Load data

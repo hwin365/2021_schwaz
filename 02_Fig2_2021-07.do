@@ -11,7 +11,7 @@ cd "SET YOUR DIRECTORY"
 *****************************************************************************
 *** Load data
 *****************************************************************************
-use `data'/BKZ_d_2021-07, replace
+use BKZ_d_2021-07, replace	// data used for SC
 
 xtset bkz date
 sort bkz date

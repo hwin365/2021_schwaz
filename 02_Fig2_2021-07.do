@@ -109,7 +109,7 @@ tsset district tt
 synth y_pc pop area scom y_pc(2) y_pc(8) y_pc(14) y_pc(`pretr'), tru(`tu') trp(`tr') ///
 	keep(sc_base, replace)
 
-use resout_base, clear
+use sc_base, clear
 gen diff = _Y_treated - _Y_synthetic 
 drop _Co_Number _W_Weight 
 

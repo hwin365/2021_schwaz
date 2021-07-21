@@ -189,5 +189,4 @@ graph combine abb2_scpost.gph abb2_scpre.gph,
 #delimit cr
 graph export Fig2.png", as(png) replace
 
-
 exit

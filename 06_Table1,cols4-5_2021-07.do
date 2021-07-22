@@ -1,17 +1,11 @@
 *****************************************************************************
-*** Figure 4: Event study -- daily infections
+*** Table 1, cols (4) & (5): ES Hospitalisation
 *****************************************************************************
 clear all
 capture log close
 set more off
 
-cd "D:\EDat\01_estima\01_myest\06_covidTIROL"
-
-local data   			= "daten"
-local data_temp			= "daten/temp"
-local output_graphs   	= "output/graphs/schwaz"
-local output_tables   	= "output/tables/schwaz"
-local output_smcl   	= "smcl"
+cd "SET WORKING DIRECTORY"
 
 *****************************************************************************
 *** Load data
@@ -146,97 +140,9 @@ table week treat, c(sum norm)
 table week treat, c(sum icu)
 restore
 
-*** Interact the periods with the dummy for Schwaz
-tab time, g(ew)
-forval i=1/`endES' {
-	gen intschwaz`i'=ew`i'*treat
-}
-
-*** Drop the variables for the second period which will serve as the omitted period in the regressions
-drop ew`event' intschwaz`event'
-gen sample=time>=0 & time<=`endES'
-sort treat time
-
-*****************************************************************************
-**** Regression & Results Matrix
-*****************************************************************************
-matrix results = J(`endES',4,.)
-mat results[1,4] = `startES'
-local col1 = 1
-local col3 = 3
-local col2 = 2
-local col4 = 4
-local row = 1
-
-*** Regressions
-egen id=group(gkz)
-xtset id time
-xtreg y ew* ints* time* if sample, fe vce(cl gkz)
-
-*** Matrix of coefficients
-local T1=`event'-1
-forval i == 1/`T1' {
-	mat results[`row',`col1'] = _b[intschwaz`i']
-	mat results[`row',`col2'] = _b[intschwaz`i']-1.96*_se[intschwaz`i']
-	mat results[`row',`col3'] = _b[intschwaz`i']+1.96*_se[intschwaz`i']
-	mat results[`row',`col4'] = `i'
-	local ++row
-}
-mat results[`event',1] = 0
-mat results[`event',2] = 0
-mat results[`event',3] = 0
-mat results[`event',4] = `event'
-
-local T2=`event'+1
-local row = `event'+1
-forval i == `T2'/`endES' {
-	mat results[`row',`col1'] = _b[intschwaz`i']
-	mat results[`row',`col2'] = _b[intschwaz`i']-1.96*_se[intschwaz`i']
-	mat results[`row',`col3'] = _b[intschwaz`i']+1.96*_se[intschwaz`i']
-	mat results[`row',`col4'] = `i'
-	local ++row
-}
-matrix colnames results= schwaz schwaz_lb schwaz_ub time
-mat li results, f(%8.2f)	
-
-
-*****************************************************************************
-**** Figure: weekly event study for hospitalisations
-*****************************************************************************
-preserve
-clear
-svmat results, names(col)
-
-*** Time to event
-g tte=time-`event'
-sum tte
-
-*** Achtung
-*drop if tte>12
-
-/*
-sum tte
-#delimit
-twoway //line schwaz dweek, lw(0.5) lc(red*1.4) ||
-	scatter schwaz tte, m(o) mc(red*1.4) msiz(1.5) ||  
-	rcap schwaz_ub schwaz_lb tte, lw(0.15) lc(red*1.4) msiz(0.0)
-	yline(0, lw(0.3) lc(gs8))
-	xline(0, lp(dash) lw(0.3))
-	ylabel(,labs(2) angle(0) grid glc(gs13%40) glw(0.05))
-    xlabel(`r(min)'(1)`r(max)' 0 "Event", labs(2) angle(0) grid glc(gs13%40) glw(0.05)) 
-	ytitle("Difference in incidence (per 100,000)", place(12) orient(vertical) si(3) m(r=1))
-	xtitle("Weeks relative to vaccination campaign (dose 1)", place(12) si(3) m(t=3))
-	legend(order(1 "Point estimate" 2 "95%--CI") ring(0) pos(1) rows(1) bm("3 0 2 0") linegap(1) region(color(none)) symy(3) symx(5) si(2.5))
-	note("", span si(3) linegap(1) m(t=3)) // ; @Paetzold&Winner (University of Salzburg)
-	graphregion(margin(2 5 2 2));
-#delimit cr
-graph export "output\graphs\schwaz\07_inf_weekly_ages.png", replace
-*/
-restore
-
 *****************************************************************************
 **** Table 1, columns 4-5: 2x2 DD-estimates
-**** Change in line 138 for (1): norm_av, (2) nc_icu
+**** Change in line 132 for (1): norm_av, (2) nc_icu
 *****************************************************************************
 g ints=(time>`event' & treat==1)
 *egen id=group(gkz), label

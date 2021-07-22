@@ -10,7 +10,7 @@ cd "SET WORKING DIRECTORY"
 *****************************************************************************
 *** Load data
 *****************************************************************************
-use daten/tirol_GKZ_d_2021-07-12, clear			// date used for the ES
+use daten/tirol_GKZ_d_2021-07-12, clear		
 
 *** Keep Schwaz and neighboring districts
 keep if (bezirk=="Kufstein" | bezirk=="Innsbruck-Land" | bezirk=="Schwaz")
@@ -21,9 +21,8 @@ drop if week>26
 *****************************************************************************
 **** Define treatment and control group
 *****************************************************************************
-*table gemeinde if bezirk=="Schwaz", c(m gkz)
-*table gemeinde if bezirk=="Innsbruck-Land", c(m gkz)
-*table gemeinde if bezirk=="Kufstein", c(m gkz)
+table gemeinde if bezirk=="Innsbruck-Land", c(m gkz)
+table gemeinde if bezirk=="Kufstein", c(m gkz)
 
 *** Define TG/CG
 local i=3		// 1: IL, 2: KU, 3: IL+KU
@@ -239,7 +238,7 @@ twoway scatter schwaz tte, m(o) mc(red*1.4) msiz(1.7) ||
 	xline(0, lp(dash) lw(0.3))
 	xline(4, lp(dash) lw(0.3))
 	ylabel(-50(10)30,labs(2.5) angle(0) grid glc(gs14%15) glw(0.3))
-    xlabel(`r(min)'(1)`r(max)' 0 "{bf:d1}" 4 "{bf:d2}", labs(2) angle(0) grid glc(gs14%15) glw(0.3)) 
+    	xlabel(`r(min)'(1)`r(max)' 0 "{bf:d1}" 4 "{bf:d2}", labs(2) angle(0) grid glc(gs14%15) glw(0.3)) 
 	title("{bf:b}", just(left) bexpand si(4) margin(b=4) span)
 	ytitle("Difference in 7-day moving average per 100,000", place(12) orient(vertical) si(3) m(r=1))
 	xtitle("Weeks relative to vaccination campaign (1st dose: d1)", place(12) si(3) m(t=4))

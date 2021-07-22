@@ -145,7 +145,7 @@ restore
 **** Change in line 132 for (1): norm_av, (2) nc_icu
 *****************************************************************************
 g ints=(time>`event' & treat==1)
-*egen id=group(gkz), label
+egen id=group(gkz), label
 
 drop if y==.
 

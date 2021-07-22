@@ -12,7 +12,7 @@ cd "SET WORKING DIRECTORY"
 *****************************************************************************
 use daten/BKZ_d_2021-07.dta, clear	 		// data used to draw the figure
 
-*** Merge population aged 0-16
+*** Merge population aged 0-16 to correct for adult population
 merge m:1 bkz using bezirke_einwohner, keepus(a_00_20)	// merge age-specific population
 drop _merge
 

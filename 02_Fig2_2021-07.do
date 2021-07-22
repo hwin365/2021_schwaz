@@ -5,7 +5,6 @@ clear all
 capture log close
 set more off
 
-*** Set paths
 cd "SET WORKING DIRECTORY"
 
 *****************************************************************************
@@ -161,7 +160,7 @@ twoway line schwaz days, lp(solid) lw(0.5) lc(red*1.3) ||
 	legend(order(1 "Schwaz" 2 "Synthetic control group") ring(1) pos(7) rows(1) bm("0 0 0 2") linegap(1) region(color(none)) symy(3) symx(5) si(2.5))
 	plotregion(lcolor(gray*0.00) m(0))
 	xsize(4) ysize(3)
-saving(abb2_scpost, replace);
+	saving(abb2_scpost, replace);
 #delimit cr
 
 *** Pre-treatment period

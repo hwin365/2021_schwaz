@@ -33,7 +33,6 @@ local d2_end=td(11apr2021)
 *****************************************************************************
 *** Dependent variable: cumulative infections per 100000
 *****************************************************************************
-drop if bl=="Wien" 						// drop whole district of Vienna
 drop if bezirk=="Rust(Stadt)" 			// drop district, data are unreliable
 
 drop tt

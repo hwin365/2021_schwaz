@@ -10,7 +10,7 @@ cd "SET WORKING DIRECTORY"
 *****************************************************************************
 *** Load data
 *****************************************************************************
-use daten/BKZ_w_2021-07, clear	// data used for SC
+use daten/BKZ_w_2021-07, clear	
 
 drop if yr==2020
 
@@ -128,18 +128,18 @@ twoway line schwaz days, lp(solid) lw(0.5) lc(red*1.3) ||
 	line synth_schwaz days, lw(0.5) lp(dash) lc(midblue*1.3) 
 	xline(0, lp(shortdash) lw(0.3))
 	xline(`dose2', lp(shortdash) lw(0.3))
-ylab(0(25)125, format(%8.0f) labs(2.2) angle(horizontal) grid glc(gs13%40) glw(0.05)) ysca(titlegap(1))
-xlab(`r(min)'(1)`r(max)' 0 "{bf: d1}" 4 "{bf: d2}", labs(2.0) angle(0) grid glc(gs13%40) glw(0.05)) xsca(titlegap(3))
-title("{bf:a}", just(left) bexpand si(4) margin(b=4) span)				 
-ytitle("Hospital admissions per 100,000", place(12) orient(vertical) si(2.5)) 
-xtitle("Weeks relative to vaccination campaign (1st dose: d1)", place(12) si(2.5) m(t=1))
-legend(order(1 "Schwaz" 2 "Synthetic Schwaz") ring(1) pos(7) rows(1) bm("0 0 0 2") linegap(1) region(color(none)) symy(3) symx(5) si(2.5))
-plotregion(lcolor(gray*0.00) m(0))
-xsize(4) ysize(3)
-saving(abb4_norm, replace);
+	ylab(0(25)125, format(%8.0f) labs(2.2) angle(horizontal) grid glc(gs13%40) glw(0.05)) ysca(titlegap(1))
+	xlab(`r(min)'(1)`r(max)' 0 "{bf: d1}" 4 "{bf: d2}", labs(2.0) angle(0) grid glc(gs13%40) glw(0.05)) xsca(titlegap(3))
+	title("{bf:a}", just(left) bexpand si(4) margin(b=4) span)				 
+	ytitle("Hospital admissions per 100,000", place(12) orient(vertical) si(2.5)) 
+	xtitle("Weeks relative to vaccination campaign (1st dose: d1)", place(12) si(2.5) m(t=1))
+	legend(order(1 "Schwaz" 2 "Synthetic Schwaz") ring(1) pos(7) rows(1) bm("0 0 0 2") linegap(1) region(color(none)) symy(3) symx(5) si(2.5))
+	plotregion(lcolor(gray*0.00) m(0))
+	xsize(4) ysize(3)
+	saving(abb4_norm, replace);
 #delimit cr
 
-*** Graph combine: First run code with "g y=norm" in line 47, and then change to g "y=icu"
+*** Graph combine: First run code with "g y=norm" in line 41, and then change to g "y=icu"
 #delimit
 graph combine abb4_norm.gph abb4_icu.gph, 
 	caption("Fig.4: Hospital ({bf:a}) and ICU ({bf:b}) admissions in Schwaz versus synthetic control group")

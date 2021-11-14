@@ -84,7 +84,7 @@ twoway scatteri 80 `d1' 80 `d1_end', recast(area) bc(gs11%1) fc(gs11%40) ||
 #delimit cr
 
 *** Save
-graph export Fig1.png", replace
+graph export Fig1.png, replace
 
 exit
 

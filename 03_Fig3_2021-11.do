@@ -1,5 +1,5 @@
 *****************************************************************************
-*** Figure 4: SC Hospitalizations - districts, weekly data
+*** Figure 3: SC Hospitalizations - districts, weekly data
 *****************************************************************************
 clear all
 capture log close
@@ -10,7 +10,7 @@ cd "SET WORKING DIRECTORY"
 *****************************************************************************
 *** Load data
 *****************************************************************************
-use daten/BKZ_w_2021-07, clear	
+use `data'/BKZ_w_2021-08, clear
 
 drop if yr==2020
 
@@ -24,7 +24,7 @@ by bkz: g tt=_n
 local start=6					
 drop if kw<`start'
 
-local d1_start=10			// 11.3. corresponds to calendar week 10
+local d1_start=10			// 11.3. (start of dose 1) corresponds to calendar week 10
 local d1_ende=11
 local d2_start=14			// dose 2
 local d2_ende=14
@@ -34,11 +34,11 @@ local d2_ende=14
 *** norm: general hospitalizations
 *** icu: ICUs
 *****************************************************************************
-drop if bezirk=="Rust(Stadt)" 			// drop district, data are unreliable
+drop if bezirk=="Rust(Stadt)" 			// drop district, data not reliable
 
 *** Switch between normal and ICU cap.
-g y=norm
-drop if kw>21
+g y=icu
+drop if kw>25
 
 *** Spell
 drop tt
@@ -69,6 +69,7 @@ drop temp*
 
 *** y per capita
 g y_pc=y_sum/pop*100000
+*g y_pc=y/pop*100000
 
 *****************************************************************************
 *** Prepare SC
@@ -104,17 +105,17 @@ local d2=r(max)
 *****************************************************************************
 tsset district tt
 synth y_pc pop area scom y_pc(2) y_pc(3) y_pc(5), tru(`tu') trp(`tr') ///
-	keep(hosp, replace)
+	keep(`data_temp'/hosp, replace)
 
-use hosp, clear
+use `data_temp'/hosp, clear
 
 *** Schwaz and synthetic Schwaz
-ren _Y_treated schwaz
+ren _Y_treated schwazd
 ren _Y_synthetic synth_schwaz
 keep _time schwaz synth_schwaz
 
 *****************************************************************************
-*** Figure
+*** Figure 3
 *****************************************************************************
 drop if schwaz==.
 gen temp1=_n
@@ -122,29 +123,33 @@ gen days=temp1-`tr'
 drop temp1
 local dose2=`d2'-`tr'
 
+**# Treatment graph
 sum days
 #delimit
 twoway line schwaz days, lp(solid) lw(0.5) lc(red*1.3) ||
 	line synth_schwaz days, lw(0.5) lp(dash) lc(midblue*1.3) 
 	xline(0, lp(shortdash) lw(0.3))
 	xline(`dose2', lp(shortdash) lw(0.3))
-	ylab(0(25)125, format(%8.0f) labs(2.2) angle(horizontal) grid glc(gs13%40) glw(0.05)) ysca(titlegap(1))
-	xlab(`r(min)'(1)`r(max)' 0 "{bf: d1}" 4 "{bf: d2}", labs(2.0) angle(0) grid glc(gs13%40) glw(0.05)) xsca(titlegap(3))
-	title("{bf:a}", just(left) bexpand si(4) margin(b=4) span)				 
-	ytitle("Hospital admissions per 100,000", place(12) orient(vertical) si(2.5)) 
+	/*ylab(0(25)125, format(%8.0f) labs(2.2) angle(horizontal) grid glc(gs15) glw(0.05)) ysca(titlegap(1))*/
+	ylab(0(5)25, format(%8.0f) labs(2.2) angle(horizontal) grid glc(gs15) glw(0.05)) ysca(titlegap(1))
+	xlab(`r(min)'(1)`r(max)' 0 "{bf: d1}" 4 "{bf: d2}", labs(2.0) angle(0)) xsca(titlegap(3))
+	title("{bf:b}", just(left) bexpand si(4) margin(b=4) span)				 
+	/*ytitle("Cumulative hospital admissions per 100,000", place(12) orient(vertical) si(2.5))*/
+	ytitle("Cumulative hospital admissions per 100,000", place(12) orient(vertical) si(2.5))
 	xtitle("Weeks relative to vaccination campaign (1st dose: d1)", place(12) si(2.5) m(t=1))
 	legend(order(1 "Schwaz" 2 "Synthetic Schwaz") ring(1) pos(7) rows(1) bm("0 0 0 2") linegap(1) region(color(none)) symy(3) symx(5) si(2.5))
 	plotregion(lcolor(gray*0.00) m(0))
 	xsize(4) ysize(3)
-	saving(abb4_norm, replace);
+	saving(`output_graphs'/abb3b, replace);
 #delimit cr
 
-*** Graph combine: First run code with "g y=norm" in line 41, and then change to g "y=icu"
+**# Figure 3: Combined graph (First run code with "g y=norm" in line 41, then change to g "y=icu" and re-run code again)
 #delimit
-graph combine abb4_norm.gph abb4_icu.gph, 
-	caption("Fig.4: Hospital ({bf:a}) and ICU ({bf:b}) admissions in Schwaz versus synthetic control group")
+graph combine `output_graphs'/abb3a_norm.gph `output_graphs'/abb3b_icu.gph, 
 	graphregion(color(white)) rows(1) xsize(4) ysize(2) iscale(1);
 #delimit cr
-graph export Fig4.png, as(png) replace
+
+*** Save
+graph export Fig3.png, as(png) replace
 
 exit

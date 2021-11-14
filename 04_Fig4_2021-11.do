@@ -229,7 +229,6 @@ twoway //line schwaz dweek, lw(0.5) lc(red*1.4) ||
 	plotregion(lcolor(gray*0.5) m(l=1)) graphregion(margin(2 5 2 2))
 	saving(abb4b, replace);
 #delimit cr
-*graph export "output\graphs\schwaz\07_inf_weekly_ages.png", replace
 restore
 
 
